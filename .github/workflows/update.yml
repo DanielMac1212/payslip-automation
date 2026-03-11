@@ -22,7 +22,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run script
-        run: python payslip_script.py
+        run: python extract.py
 
       - name: Commit updates
         run: |
