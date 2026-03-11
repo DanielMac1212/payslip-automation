@@ -29,8 +29,5 @@ jobs:
           git config --global user.name "automation"
           git config --global user.email "bot@github.com"
           git add .
-          git commit -m "Update finance data" || echo "No changes"
-          git push
-          git add .
-          git commit -m "Update finance data"
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update finance data"
           git push
