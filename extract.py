@@ -130,7 +130,8 @@ def upload_paylsip_data():
         "visa_remaining": float(latest_balance),
         "weeks_until_paid": round(float(weeks_left), 2),
         "tax_remaining": float(tax_balance),
-        "weeks_tax_remaining": round(float(weeks_tax_remaining),2)
+        "weeks_tax_remaining": round(float(weeks_tax_remaining),2),
+        "test": 1
     }
 
     with open(summary_file,"w") as f:
