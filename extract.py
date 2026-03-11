@@ -11,7 +11,7 @@ tax_bill = 7056.60 - 353
 
 summary_file = "payslipsummary.json"
 folder_path = "payslips"
-file_path = "Payslips/all_payslips.xlsx"
+file_path = "payslips/all_payslips.xlsx"
 
 def upload_paylsip_data():
 
