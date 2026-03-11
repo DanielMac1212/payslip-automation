@@ -12,6 +12,9 @@ jobs:
 
       - name: Checkout repo
         uses: actions/checkout@v4
+      
+      - name: Show repo files (debug)
+        run: ls -la
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -23,7 +26,10 @@ jobs:
 
       - name: Run script
         run: python extract.py
-
+        
+      - name: Show JSON
+        run: cat payslipsummary.json
+        
       - name: Commit updates
         run: |
           git config --global user.name "automation"
@@ -31,3 +37,6 @@ jobs:
           git add .
           git diff --quiet && git diff --staged --quiet || git commit -m "Update finance data"
           git push
+
+      - name: Show JSON after commit
+        run: cat payslipsummary.json
