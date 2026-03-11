@@ -123,7 +123,7 @@ def upload_paylsip_data():
     latest_balance = float(df[df["File"] != "Total"].iloc[-1]["Remaining Visa Balance"])
 
     weeks_left = latest_balance / latest["Net Pay"]
-    weeks_tax_remaining = tax_balance / 9
+    weeks_tax_remaining = tax_balance / 1
     summary = {
         "latest_week": latest["Week Ending"],
         "latest_net": float(latest["Net Pay"]),
