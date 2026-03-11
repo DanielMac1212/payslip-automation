@@ -136,11 +136,6 @@ def upload_paylsip_data():
     with open(summary_file,"w") as f:
         json.dump(summary, f, indent=2)
 
-    print("\nPDFs and Excel updated!\n")
+upload_paylsip_data()
 
-user = input("\nUpdate payslips ? (y/n)  ")
-if user == "y":
-    upload_paylsip_data()
-else:
-    exit()
     
