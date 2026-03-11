@@ -10,7 +10,7 @@ start_balance = 7820
 tax_bill = 7056.60 - 353
 
 summary_file = "/Users/danielmchugh/Library/Mobile Documents/iCloud~dk~simonbs~Scriptable/Documents/payslipsummary.json"
-folder_path = "/Users/danielmchugh/Documents/Oz/LGC Rail Services/Payslips"
+folder_path = "payslips"
 file_path = "/Users/danielmchugh/Documents/Oz/LGC Rail Services/Payslips/all_payslips.xlsx"
 
 def upload_paylsip_data():
