@@ -23,16 +23,12 @@ jobs:
 
       - name: Install packages
         run: pip install -r requirements.txt
-
-      - name: Create payslip folder
-        run: mkdir payslips
-        
-      - name: Download payslips
-        run: |
-          wget -P payslips ${{ secrets.PAYSLIPS_URL }}
           
       - name: Run script
         run: python extract.py
+
+      - name: Delete processed payslip
+        run: rm -f payslips/payslip.pdf
         
       - name: Show JSON
         run: cat payslipsummary.json
