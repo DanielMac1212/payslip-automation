@@ -130,8 +130,7 @@ def main():
             "weeks_until_paid": weeks_left,
             "tax_remaining": tax_balance,
             "weeks_tax_remaining": weeks_tax_remaining
-        },
-        "payslips": df.to_dict(orient="records")
+        }
     }
 
     with open(summary_file, "w") as f:
