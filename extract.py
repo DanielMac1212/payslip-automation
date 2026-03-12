@@ -11,7 +11,6 @@ tax_bill = 7056.60 - 353
 
 summary_file = "payslipsummary.json"
 folder_path = "payslips"
-file_path = "payslips/all_payslips.xlsx"
 
 def upload_paylsip_data():
 
@@ -69,55 +68,6 @@ def upload_paylsip_data():
         "2x Hours Worked": df["2x Hours Worked"].sum(),
         "Remaining Visa Balance": ""  # optional
     }
-
-    df_total = pd.concat([df, pd.DataFrame([total_row])], ignore_index=True)
-    df_total.to_excel(file_path, index=False)
-
-    def create_net_pay_chart(file_path):
-        wb = load_workbook(file_path)
-        ws = wb.active
-
-        chart = LineChart()
-        chart.title = "Net Pay Over Time"
-        chart.style = 2
-        chart.y_axis.title = "Net Pay ($)"
-        chart.x_axis.title = "Week Ending"
-
-        data = Reference(ws, min_col=4, min_row=1, max_row=ws.max_row-1)
-        dates = Reference(ws, min_col=2, min_row=2, max_row=ws.max_row-1)
-
-        chart.add_data(data, titles_from_data=True)
-        chart.set_categories(dates)
-
-        chart.height = 10
-        chart.width = 20
-
-        ws.add_chart(chart, "I20")
-        wb.save(file_path)
-
-    create_net_pay_chart(file_path)
-
-    def auto_adjust_column_width(file_path: str):
-        wb = load_workbook(file_path)
-        ws = wb.active
-
-        for col in ws.columns:
-            max_length = 0
-            col_letter = col[0].column_letter  # Get the column name
-            for cell in col:
-                try:
-                    if cell.value:
-                        length = len(str(cell.value))
-                        if length > max_length:
-                            max_length = length
-                except:
-                    pass
-            adjusted_width = (max_length + 2)
-            ws.column_dimensions[col_letter].width = adjusted_width
-
-        wb.save(file_path)
-
-    auto_adjust_column_width(file_path)
 
     latest = df[df["File"] != "Total"].iloc[-1]
     latest_balance = float(df[df["File"] != "Total"].iloc[-1]["Remaining Visa Balance"])
