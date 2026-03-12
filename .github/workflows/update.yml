@@ -1,11 +1,9 @@
 name: Payslip Processor
 
 on:
-  workflow_dispatch:
-    inputs:
-      pdf_url:
-        description: "Temporary URL of payslip"
-        required: true
+  push:
+    paths:
+      - "payslips/*.pdf
 
 jobs:
   run-script:
@@ -14,42 +12,18 @@ jobs:
 
     steps:
 
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       
-      - name: Show repo files (debug)
-        run: ls -la
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Install packages
-        run: pip install -r requirements.txt
+      - run: pip install -r requirements.txt
 
-      - name: Download payslip
-        run: |
-          mkdir -p payslips
-          wget -O payslips/payslip.pdf "${{ github.event.inputs.pdf_url }}"
-
-      - name: Show paylsip folder
-        run: ls -R payslips
-      
-      - name: Check downloaded file
-        run: |
-
-          file payslips/payslip.pdf
-          head payslips/payslip.pdf
-          
-      - name: Run script
-        run: python extract.py
+      - run: python extract.py
       
       - name: Delete processed payslip
-        run: rm -f payslips/payslip.pdf
-        
-      - name: Show JSON
-        run: cat payslipsummary.json
+        run: rm -f payslips/payslip*.pdf
         
       - name: Commit updates
         run: |
