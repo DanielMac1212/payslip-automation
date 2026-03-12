@@ -35,7 +35,12 @@ jobs:
 
       - name: Show paylsip folder
         run: ls -R payslips
-        
+      
+      - name: Check downloaded file
+        run: |
+
+    file payslips/payslip.pdf
+    head payslips/payslip.pdf
       - name: Run script
         run: python extract.py
       
