@@ -66,7 +66,7 @@ def upload_payslip_data():
         "2x Hours Worked": df["2x Hours Worked"].sum(),
         "Remaining Visa Balance": ""  # optional
     }
-    if df.empty():
+    if df.empty:
         return
         
     latest = df.iloc[-1]
