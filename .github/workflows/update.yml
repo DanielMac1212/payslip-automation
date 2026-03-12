@@ -1,4 +1,4 @@
-name: Update Finance Dashboard
+name: Payslip Processor
 
 on:
   workflow_dispatch:
@@ -24,6 +24,13 @@ jobs:
       - name: Install packages
         run: pip install -r requirements.txt
 
+      - name: Create payslip folder
+        run: mkdir payslips
+        
+      - name: Download payslips
+        run: |
+          wget -P payslips ${{ secrets.PAYSLIPS_URL }}
+          
       - name: Run script
         run: python extract.py
         
@@ -34,9 +41,6 @@ jobs:
         run: |
           git config --global user.name "automation"
           git config --global user.email "bot@github.com"
-          git add .
+          git add payslipsummary.json
           git diff --quiet && git diff --staged --quiet || git commit -m "Update finance data"
           git push
-
-      - name: Show JSON after commit
-        run: cat payslipsummary.json
