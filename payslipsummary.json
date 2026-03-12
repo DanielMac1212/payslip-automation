@@ -1,9 +1,23 @@
 {
-  "latest_week": "08/03/2026",
-  "latest_net": 1173.0,
-  "visa_remaining": 6647.0,
-  "weeks_until_paid": 5.67,
-  "tax_remaining": 6613.6,
-  "weeks_tax_remaining": 73.48,
-  "test": 1
+  "summary": {
+    "latest_week": "08/03/2026",
+    "latest_net": 1173.0,
+    "visa_remaining": null,
+    "weeks_until_paid": null,
+    "tax_remaining": null,
+    "weeks_tax_remaining": null
+  },
+  "payslips": [
+    {
+      "File": "Payslip-1354251.pdf",
+      "Week Ending": "08/03/2026",
+      "Gross Pay": 2760.0,
+      "Net Pay": 1173.0,
+      "Ordinary Hours Worked": 40,
+      "1.5x Hours Worked": null,
+      "2x Hours Worked": 8.0,
+      "Remaining Visa Balance": null,
+      "Tax Bill Balance": null
+    }
+  ]
 }
