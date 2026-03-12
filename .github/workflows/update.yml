@@ -23,10 +23,13 @@ jobs:
 
       - name: Install packages
         run: pip install -r requirements.txt
-          
+
+      - name: SHoe paylsip folder
+        run: ls -R payslips
+        
       - name: Run script
         run: python extract.py
-
+      
       - name: Delete processed payslip
         run: rm -f payslips/payslip.pdf
         
