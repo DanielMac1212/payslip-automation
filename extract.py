@@ -2,9 +2,7 @@ import os
 import pdfplumber
 import re
 import pandas as pd
-from openpyxl import load_workbook
 import json
-from openpyxl.chart import LineChart, Reference
 
 start_balance = 7820
 tax_bill = 7056.60 - 353
@@ -68,12 +66,14 @@ def upload_payslip_data():
         "2x Hours Worked": df["2x Hours Worked"].sum(),
         "Remaining Visa Balance": ""  # optional
     }
+    if df.empty():
+        return
+        
+    latest = df.iloc[-1]
+    latest_balance = float(latest["Remaining Visa Balance"])
 
-    latest = df[df["File"] != "Total"].iloc[-1]
-    latest_balance = float(df[df["File"] != "Total"].iloc[-1]["Remaining Visa Balance"])
-
-    weeks_left = latest_balance / latest["Net Pay"]
-    weeks_tax_remaining = tax_balance / 90
+    weeks_left = latest_balance / latest["Net Pay"] if latest["Net Pay"] else None
+    weeks_tax_remaining = tax_balance / 90 if tax_balance else None
     summary = {
         "latest_week": latest["Week Ending"],
         "latest_net": float(latest["Net Pay"]),
