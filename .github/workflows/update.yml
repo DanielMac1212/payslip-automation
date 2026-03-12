@@ -2,6 +2,10 @@ name: Payslip Processor
 
 on:
   workflow_dispatch:
+    inputs:
+      pdf_url:
+        description: "Temporary URL of payslip"
+        required: True
 
 jobs:
   run-script:
@@ -23,6 +27,11 @@ jobs:
 
       - name: Install packages
         run: pip install -r requirements.txt
+
+      - name: Download payslip
+        run: |
+          mkdir -p payslips
+          wget -O payslips/payslip.pdf "${{ github.event.inputs.pdf_url }}"
 
       - name: Show paylsip folder
         run: ls -R payslips
