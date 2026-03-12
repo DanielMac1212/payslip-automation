@@ -5,7 +5,7 @@ on:
     inputs:
       pdf_url:
         description: "Temporary URL of payslip"
-        required: True
+        required: true
 
 jobs:
   run-script:
@@ -39,8 +39,9 @@ jobs:
       - name: Check downloaded file
         run: |
 
-    file payslips/payslip.pdf
-    head payslips/payslip.pdf
+          file payslips/payslip.pdf
+          head payslips/payslip.pdf
+          
       - name: Run script
         run: python extract.py
       
