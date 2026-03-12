@@ -87,6 +87,6 @@ def upload_paylsip_data():
     with open(summary_file,"w") as f:
         json.dump(summary, f, indent=2)
 
-upload_paylsip_data()
+upload_paylslip_data()
 
     
