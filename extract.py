@@ -4,89 +4,144 @@ import re
 import pandas as pd
 import json
 
+folder_path = "payslips"
+summary_file = "payslipsummary.json"
+
 start_balance = 7820
 tax_bill = 7056.60 - 353
 
-summary_file = "payslipsummary.json"
-folder_path = "payslips"
 
-def upload_payslip_data():
+def extract_payslip_data(pdf_path):
 
-    rows = []
-    for file in os.listdir(folder_path):
-        if file.endswith(".pdf"):
-            pdf_path = os.path.join(folder_path, file)
-            with pdfplumber.open(pdf_path) as pdf:
-                text = pdf.pages[0].extract_text()
+    with pdfplumber.open(pdf_path) as pdf:
+        text = pdf.pages[0].extract_text()
 
-            dateEnd = re.search(r"Period Ending[:\s]*([\d]{2}/[\d]{2}/[\d]{4})", text)
-            hoursx1 = re.search(r"Hours Paid[:\s]*([\d]+)", text)
-            hoursx1_5 = re.search(r"Rail - Casual Ordinary Hours 1.5[:\s](\d)", text)
-            hoursx2 = re.search(r"Rail - Casual Ordinary Hours 2x[:\s](\d)", text)
-            gross = re.search(r"Gross Earnings[:\s]*\$?([\d,\.]+)", text)
-            net = re.search(r"Net Payment[:\s]*\$?([\d,\.]+)", text)
+    dateEnd = re.search(r"Period Ending[:\s]*([\d]{2}/[\d]{2}/[\d]{4})", text)
+    hoursx1 = re.search(r"Hours Paid[:\s]*([\d]+)", text)
+    hoursx1_5 = re.search(r"Rail - Casual Ordinary Hours 1.5[:\s]*([\d\.]+)", text)
+    hoursx2 = re.search(r"Rail - Casual Ordinary Hours 2x[:\s]*([\d\.]+)", text)
+    gross = re.search(r"Gross Earnings[:\s]*\$?([\d,\.]+)", text)
+    net = re.search(r"Net Payment[:\s]*\$?([\d,\.]+)", text)
 
-            rows.append({
-                "File": file,
-                "Week Ending": dateEnd.group(1) if dateEnd else None,
-                "Gross Pay": float(gross.group(1).replace(",","")) if gross else None,
-                "Net Pay": float(net.group(1).replace(",","")) if net else None,
-                "Ordinary Hours Worked": int(hoursx1.group(1)) if hoursx1 else None,
-                "1.5x Hours Worked": float(hoursx1_5.group(1).replace(",","")) if hoursx1_5 else None,
-                "2x Hours Worked": float(hoursx2.group(1).replace(",","")) if hoursx2 else None
-            })
+    return {
+        "File": os.path.basename(pdf_path),
+        "Week Ending": dateEnd.group(1) if dateEnd else None,
+        "Gross Pay": float(gross.group(1).replace(",", "")) if gross else None,
+        "Net Pay": float(net.group(1).replace(",", "")) if net else None,
+        "Ordinary Hours Worked": int(hoursx1.group(1)) if hoursx1 else None,
+        "1.5x Hours Worked": float(hoursx1_5.group(1)) if hoursx1_5 else None,
+        "2x Hours Worked": float(hoursx2.group(1)) if hoursx2 else None
+    }
 
-    df = pd.DataFrame(rows)
+
+def load_existing_data():
+
+    if not os.path.exists(summary_file):
+        return []
+
+    with open(summary_file) as f:
+        data = json.load(f)
+
+    return data.get("payslips", [])
+
+
+def calculate_balances(payslips):
+
+    df = pd.DataFrame(payslips)
     df["Week Ending"] = pd.to_datetime(df["Week Ending"], dayfirst=True)
-    df = df.sort_values(by="Week Ending", ascending=True).reset_index(drop=True)
+    df = df.sort_values("Week Ending").reset_index(drop=True)
 
-    # df["Remaining Visa Balance"] = start_balance
-    target_row = 11
-    tax_balance = tax_bill
     balance = start_balance
+    tax_balance = tax_bill
+
+    df["Remaining Visa Balance"] = None
+    df["Tax Bill Balance"] = None
+
+    target_row = 11
+
     for idx in range(target_row, len(df)):
         net = df.at[idx, "Net Pay"]
 
         if pd.notnull(net):
-            net = float(net)
             balance -= net
-            df.at[idx, "Remaining Visa Balance"] = round(balance, 2)
             tax_balance -= 90
-            df.at[idx, "Tax Bill Balance"] = tax_balance
+
+            df.at[idx, "Remaining Visa Balance"] = round(balance, 2)
+            df.at[idx, "Tax Bill Balance"] = round(tax_balance, 2)
 
     df["Week Ending"] = df["Week Ending"].dt.strftime("%d/%m/%Y")
 
-    total_row = {
-        "File": "TOTAL",
-        "Week Ending": pd.NaT,
-        "Gross Pay": df["Gross Pay"].sum(),
-        "Net Pay": df["Net Pay"].sum(),
-        "Ordinary Hours Worked": df["Ordinary Hours Worked"].sum(),
-        "1.5x Hours Worked": df["1.5x Hours Worked"].sum(),
-        "2x Hours Worked": df["2x Hours Worked"].sum(),
-        "Remaining Visa Balance": ""  # optional
-    }
-    if df.empty:
+    return df
+
+
+def main():
+
+    existing_payslips = load_existing_data()
+
+    processed_files = {p["File"] for p in existing_payslips}
+
+    new_entries = []
+
+    for file in os.listdir(folder_path):
+
+        if not file.endswith(".pdf"):
+            continue
+
+        if file in processed_files:
+            continue
+
+        pdf_path = os.path.join(folder_path, file)
+
+        try:
+            data = extract_payslip_data(pdf_path)
+            new_entries.append(data)
+
+        except Exception as e:
+            print(f"Skipping {file}: {e}")
+            continue
+
+    all_payslips = existing_payslips + new_entries
+
+    if not all_payslips:
+        print("No payslips found.")
         return
-        
-    latest = df.iloc[-1]
-    latest_balance = float(latest["Remaining Visa Balance"])
 
-    weeks_left = latest_balance / latest["Net Pay"] if latest["Net Pay"] else None
-    weeks_tax_remaining = tax_balance / 90 if tax_balance else None
-    summary = {
-        "latest_week": latest["Week Ending"],
-        "latest_net": float(latest["Net Pay"]),
-        "visa_remaining": float(latest_balance),
-        "weeks_until_paid": round(float(weeks_left), 2),
-        "tax_remaining": float(tax_balance),
-        "weeks_tax_remaining": round(float(weeks_tax_remaining),2),
-        "test": 1
+    df = calculate_balances(all_payslips)
+
+    latest = df.iloc[-1]
+
+    latest_balance = latest["Remaining Visa Balance"]
+    tax_balance = latest["Tax Bill Balance"]
+
+    weeks_left = None
+    weeks_tax_remaining = None
+
+    if pd.notnull(latest_balance) and latest["Net Pay"]:
+        weeks_left = round(latest_balance / latest["Net Pay"], 2)
+
+    if pd.notnull(tax_balance):
+        weeks_tax_remaining = round(tax_balance / 90, 2)
+
+    output = {
+        "summary": {
+            "latest_week": latest["Week Ending"],
+            "latest_net": float(latest["Net Pay"]),
+            "visa_remaining": latest_balance,
+            "weeks_until_paid": weeks_left,
+            "tax_remaining": tax_balance,
+            "weeks_tax_remaining": weeks_tax_remaining
+        },
+        "payslips": df.to_dict(orient="records")
     }
 
-    with open(summary_file,"w") as f:
-        json.dump(summary, f, indent=2)
+    with open(summary_file, "w") as f:
+        json.dump(output, f, indent=2)
 
-upload_payslip_data()
+    # delete processed PDFs
+    for file in os.listdir(folder_path):
+        if file.endswith(".pdf"):
+            os.remove(os.path.join(folder_path, file))
 
-    
+
+if __name__ == "__main__":
+    main()
