@@ -3,7 +3,7 @@ name: Payslip Processor
 on:
   push:
     paths:
-      - "payslips/*.pdf
+      - "payslips/*.pdf"
 
 jobs:
   run-script:
