@@ -12,7 +12,7 @@ tax_bill = 7056.60 - 353
 summary_file = "payslipsummary.json"
 folder_path = "payslips"
 
-def upload_paylsip_data():
+def upload_payslip_data():
 
     rows = []
     for file in os.listdir(folder_path):
@@ -87,6 +87,6 @@ def upload_paylsip_data():
     with open(summary_file,"w") as f:
         json.dump(summary, f, indent=2)
 
-upload_paylslip_data()
+upload_payslip_data()
 
     
