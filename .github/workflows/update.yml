@@ -29,7 +29,8 @@ jobs:
         run: |
           git config --global user.name "automation"
           git config --global user.email "bot@github.com"
-          git add payslipsummary.json
+          git add -A
+
           git diff --staged --quiet || git commit -m "Update finance data"
 
           git push
