@@ -39,9 +39,15 @@ def load_existing_data():
     if not os.path.exists(summary_file):
         return []
 
-    with open(summary_file) as f:
-        data = json.load(f)
-
+    if os.path.getsize(summary_file) == 0
+        return []
+    
+    with open(summary_file, "r") as f:
+        try:
+            return json.load(f)
+        except json.JSONDecodeERROR
+            return []
+            
     return data.get("payslips", [])
 
 
