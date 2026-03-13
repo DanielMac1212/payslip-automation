@@ -1,1 +1,10 @@
-
+{
+  "summary": {
+    "latest_week": "01/03/2026",
+    "latest_net": 1955.0,
+    "visa_remaining": null,
+    "weeks_until_paid": null,
+    "tax_remaining": null,
+    "weeks_tax_remaining": null
+  }
+}
