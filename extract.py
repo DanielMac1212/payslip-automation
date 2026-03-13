@@ -45,7 +45,7 @@ def load_existing_data():
     with open(summary_file, "r") as f:
         try:
             return json.load(f)
-        except json.JSONDecodeERROR:
+        except json.JSONDecodeError:
             return []
             
     return data.get("payslips", [])
