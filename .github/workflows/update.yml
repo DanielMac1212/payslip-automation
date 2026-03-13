@@ -23,7 +23,7 @@ jobs:
       - run: python extract.py
       
       - name: Delete processed payslip
-        run: rm -f payslips/payslip*.pdf
+        run: rm -f payslips/*.pdf
         
       - name: Commit updates
         run: |
