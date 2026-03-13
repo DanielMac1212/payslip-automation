@@ -9,7 +9,8 @@ summary_file = "payslipsummary.json"
 
 start_balance = 7820
 tax_bill = 7056.60 - 353
-
+sio_visa = start_balance / 2
+sio_paid = 0
 
 def extract_payslip_data(pdf_path):
     
@@ -143,7 +144,8 @@ def main():
             "visa_remaining": latest_balance,
             "weeks_until_paid": weeks_left,
             "tax_remaining": tax_balance,
-            "weeks_tax_remaining": weeks_tax_remaining
+            "weeks_tax_remaining": weeks_tax_remaining,
+            "sio_visa": sio_visa - sio_paid
         }
     }
 
