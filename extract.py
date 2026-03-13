@@ -10,6 +10,7 @@ summary_file = "payslipsummary.json"
 start_balance = 7820
 tax_bill = 7056.60 - 353
 sio_visa = start_balance / 2
+sio_paid = 0
 
 def extract_payslip_data(pdf_path):
     
