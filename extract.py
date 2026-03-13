@@ -13,6 +13,8 @@ tax_bill = 7056.60 - 353
 
 def extract_payslip_data(pdf_path):
 
+    week_ending = None
+    
     with pdfplumber.open(pdf_path) as pdf:
         text = pdf.pages[0].extract_text()
 
@@ -23,9 +25,13 @@ def extract_payslip_data(pdf_path):
     gross = re.search(r"Gross Earnings[:\s]*\$?([\d,\.]+)", text)
     net = re.search(r"Net Payment[:\s]*\$?([\d,\.]+)", text)
 
+    week_ending = None
+    if dateEnd:
+        week_ending = pd.to_datetime(dateEnd.group(1), dayfirst=True).strftime("%d-%m-%Y")
+                                        
     return {
         "File": os.path.basename(pdf_path),
-        "Week Ending": dateEnd.group(1) if dateEnd else None,
+        "Week Ending": week_ending,
         "Gross Pay": float(gross.group(1).replace(",", "")) if gross else None,
         "Net Pay": float(net.group(1).replace(",", "")) if net else None,
         "Ordinary Hours Worked": int(hoursx1.group(1)) if hoursx1 else None,
@@ -44,7 +50,8 @@ def load_existing_data():
     
     with open(summary_file, "r") as f:
         try:
-            return json.load(f)
+            data = json.load(f)
+            return data.get("payslips", [])
         except json.JSONDecodeError:
             return []
             
@@ -88,10 +95,9 @@ def main():
 
     new_entries = []
 
-    for file in os.listdir(folder_path):
-
-        if not file.endswith(".pdf"):
-            continue
+    pdf_files = [f for f in os.listdir("payslips") if f.endswith(".pdf")]
+    
+    for file in pdf_files:
 
         if file in processed_files:
             continue
@@ -129,6 +135,7 @@ def main():
         weeks_tax_remaining = round(tax_balance / 90, 2)
 
     output = {
+        "payslips": df.to_dict(orient="records"),
         "summary": {
             "latest_week": latest["Week Ending"],
             "latest_net": float(latest["Net Pay"]),
