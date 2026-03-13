@@ -39,7 +39,7 @@ def load_existing_data():
     if not os.path.exists(summary_file):
         return []
 
-    if os.path.getsize(summary_file) == 0
+    if os.path.getsize(summary_file) == 0:
         return []
     
     with open(summary_file, "r") as f:
