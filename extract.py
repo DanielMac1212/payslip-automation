@@ -12,8 +12,6 @@ tax_bill = 7056.60 - 353
 
 
 def extract_payslip_data(pdf_path):
-
-    week_ending = None
     
     with pdfplumber.open(pdf_path) as pdf:
         text = pdf.pages[0].extract_text()
@@ -60,9 +58,10 @@ def load_existing_data():
 
 def calculate_balances(payslips):
 
-    df = pd.DataFrame(payslips)
+    df = pd.DataFrame(payslips).replace({pd.NA: None})
     df["Week Ending"] = pd.to_datetime(df["Week Ending"], dayfirst=True)
     df = df.sort_values("Week Ending").reset_index(drop=True)
+    df = df.where(pd.notnull(df), None)
 
     balance = start_balance
     tax_balance = tax_bill
