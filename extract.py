@@ -6,6 +6,7 @@ import json
 
 folder_path = "payslips"
 summary_file = "payslipsummary.json"
+rebuild = os.getenv("REBUILD", "false") == "true"
 
 start_balance = 7820
 tax_bill = 7056.60 - 353
@@ -91,35 +92,41 @@ def main():
 
     existing_payslips = load_existing_data()
 
-    processed_files = {p["File"] for p in existing_payslips}
-
-    new_entries = []
-
-    pdf_files = [f for f in os.listdir("payslips") if f.endswith(".pdf")]
+    if rebuild:
+        if not exisiting_payslips:
+            return
+        df = calculate_balances(exisiting_payslips)
+    else:
+        processed_files = {p["File"] for p in existing_payslips}
     
-    for file in pdf_files:
+        new_entries = []
+    
+        pdf_files = [f for f in os.listdir("payslips") if f.endswith(".pdf")]
+        
+        for file in pdf_files:
+    
+            if file in processed_files:
+                continue
+    
+            pdf_path = os.path.join(folder_path, file)
+    
+            try:
+                data = extract_payslip_data(pdf_path)
+                new_entries.append(data)
+    
+            except Exception as e:
+                print(f"Skipping {file}: {e}")
+                continue
+    
+        all_payslips = existing_payslips + new_entries
+    
+        if not all_payslips:
+            print("No payslips found.")
+            return
+    
+        df = calculate_balances(all_payslips)
 
-        if file in processed_files:
-            continue
-
-        pdf_path = os.path.join(folder_path, file)
-
-        try:
-            data = extract_payslip_data(pdf_path)
-            new_entries.append(data)
-
-        except Exception as e:
-            print(f"Skipping {file}: {e}")
-            continue
-
-    all_payslips = existing_payslips + new_entries
-
-    if not all_payslips:
-        print("No payslips found.")
-        return
-
-    df = calculate_balances(all_payslips)
-
+    # SUMMARY CALCULATION
     latest = df.iloc[-1]
 
     latest_balance = latest["Remaining Visa Balance"]
