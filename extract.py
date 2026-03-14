@@ -93,7 +93,7 @@ def main():
     existing_payslips = load_existing_data()
 
     if rebuild:
-        if not exisiting_payslips:
+        if not existing_payslips:
             return
         df = calculate_balances(exisiting_payslips)
     else:
