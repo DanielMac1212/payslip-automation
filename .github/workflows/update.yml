@@ -5,6 +5,13 @@ on:
     paths:
       - "payslips/*.pdf"
 
+  workflow_dispatch:
+    inputs:
+      rebuild:
+        description: "Rebuild from JSON only (ignore PDFs)"
+        required: false
+        default: "true"
+        
 jobs:
   run-script:
 
@@ -21,6 +28,8 @@ jobs:
       - run: pip install -r requirements.txt
 
       - run: python extract.py
+        env:
+          REBUILD: ${{ github.event.inputs.rebuild }}
       
       - name: Delete processed payslip
         run: rm -f payslips/*.pdf
