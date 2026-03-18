@@ -92,6 +92,8 @@ def calculate_balances(payslips):
 
     return df
 
+def safe(value):
+    return None if pd.isna(value) else value
 
 def main():
 
@@ -145,12 +147,12 @@ def main():
     if pd.notnull(tax_balance):
         weeks_tax_remaining = round(tax_balance / 90, 2)
     
-    df = df.where(pd.notnull(df), None)
+    df = df.replace({float("nan"): None})
     
     output = {
         "payslips": df.to_dict(orient="records"),
         "summary": {
-            "latest_week": latest["Week Ending"],
+            "latest_week": safe(latest["Week Ending"]),
             "latest_net": float(latest["Net Pay"]),
             "visa_remaining": latest_balance,
             "weeks_until_paid": weeks_left,
