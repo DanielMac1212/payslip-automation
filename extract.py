@@ -18,7 +18,7 @@ def extract_payslip_data(pdf_path):
     with pdfplumber.open(pdf_path) as pdf:
         text = pdf.pages[0].extract_text()
 
-    dateEnd = re.search(r"Period\s*Ending[:\s]*([\d]{2}/[\d]{2}/[\d]{4})", text, re.IGNORECASE)
+    dateEnd = re.search(r"Period\s*Ending.*?(\d{2}/\d{2}/\d{4})", text, re.IGNORECASE | re.DOTALL)
     hoursx1 = re.search(r"Hours Paid[:\s]*([\d]+)", text)
     hoursx1_5 = re.search(r"Rail - Casual Ordinary Hours 1.5[:\s]*([\d\.]+)", text)
     hoursx2 = re.search(r"Rail - Casual Ordinary Hours 2x[:\s]*([\d\.]+)", text)
