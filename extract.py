@@ -145,7 +145,7 @@ def main():
     if pd.notnull(tax_balance):
         weeks_tax_remaining = round(tax_balance / 90, 2)
     
-    df = df.replace({float("nan"): None})
+    df = df.where(pd.notnull(df), None)
     
     output = {
         "payslips": df.to_dict(orient="records"),
