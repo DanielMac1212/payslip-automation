@@ -118,8 +118,7 @@ def main():
                 new_entries.append(data)
     
             except Exception as e:
-                print(f"Skipping {file}: {e}")
-                continue
+                raise RuntimeError(f"❌ Failed processing {file}: {e}")
     
         all_payslips = existing_payslips + new_entries
     
