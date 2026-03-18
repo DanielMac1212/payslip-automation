@@ -18,7 +18,7 @@ def extract_payslip_data(pdf_path):
     with pdfplumber.open(pdf_path) as pdf:
         text = pdf.pages[0].extract_text()
 
-    dateEnd = re.search(r"Period Ending[:\s]*([\d]{2}/[\d]{2}/[\d]{4})", text)
+    dateEnd = re.search(r"Period Ending[:\s]*([\d]{1,2}[/-][\d]{1,2}[/-][\d]{4})", text)
     hoursx1 = re.search(r"Hours Paid[:\s]*([\d]+)", text)
     hoursx1_5 = re.search(r"Rail - Casual Ordinary Hours 1.5[:\s]*([\d\.]+)", text)
     hoursx2 = re.search(r"Rail - Casual Ordinary Hours 2x[:\s]*([\d\.]+)", text)
@@ -27,8 +27,11 @@ def extract_payslip_data(pdf_path):
 
     week_ending = None
     if dateEnd:
-        week_ending = pd.to_datetime(dateEnd.group(1), dayfirst=True).strftime("%d-%m-%Y")
-                                        
+        raw_date = dateEnd.group(1).replace("-", "/")
+        parsed = pd.to_datetime(raw_date, dayfirst=True, errors="coerce")
+    if pd.notna(parsed):
+        week_ending = parsed.strftime("%d-%m-%Y")
+                                                            
     return {
         "File": os.path.basename(pdf_path),
         "Week Ending": week_ending,
