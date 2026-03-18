@@ -7,7 +7,7 @@
       "Net Pay": 4081.25,
       "Ordinary Hours Worked": 83,
       "1.5x Hours Worked": 1.0,
-      "2x Hours Worked": null,
+      "2x Hours Worked": NaN,
       "Remaining Visa Balance": null,
       "Tax Bill Balance": null
     },
@@ -18,7 +18,7 @@
       "Net Pay": 2174.75,
       "Ordinary Hours Worked": 44,
       "1.5x Hours Worked": 1.0,
-      "2x Hours Worked": null,
+      "2x Hours Worked": NaN,
       "Remaining Visa Balance": null,
       "Tax Bill Balance": null
     },
@@ -29,7 +29,7 @@
       "Net Pay": 2590.5,
       "Ordinary Hours Worked": 52,
       "1.5x Hours Worked": 2.0,
-      "2x Hours Worked": null,
+      "2x Hours Worked": NaN,
       "Remaining Visa Balance": null,
       "Tax Bill Balance": null
     },
@@ -39,8 +39,8 @@
       "Gross Pay": 460.0,
       "Net Pay": 391.0,
       "Ordinary Hours Worked": 8,
-      "1.5x Hours Worked": null,
-      "2x Hours Worked": null,
+      "1.5x Hours Worked": NaN,
+      "2x Hours Worked": NaN,
       "Remaining Visa Balance": null,
       "Tax Bill Balance": null
     },
@@ -50,8 +50,8 @@
       "Gross Pay": 2300.0,
       "Net Pay": 1955.0,
       "Ordinary Hours Worked": 40,
-      "1.5x Hours Worked": null,
-      "2x Hours Worked": null,
+      "1.5x Hours Worked": NaN,
+      "2x Hours Worked": NaN,
       "Remaining Visa Balance": null,
       "Tax Bill Balance": null
     },
@@ -61,8 +61,8 @@
       "Gross Pay": 2300.0,
       "Net Pay": 1955.0,
       "Ordinary Hours Worked": 40,
-      "1.5x Hours Worked": null,
-      "2x Hours Worked": null,
+      "1.5x Hours Worked": NaN,
+      "2x Hours Worked": NaN,
       "Remaining Visa Balance": null,
       "Tax Bill Balance": null
     },
@@ -72,8 +72,8 @@
       "Gross Pay": 1840.0,
       "Net Pay": 1564.0,
       "Ordinary Hours Worked": 32,
-      "1.5x Hours Worked": null,
-      "2x Hours Worked": null,
+      "1.5x Hours Worked": NaN,
+      "2x Hours Worked": NaN,
       "Remaining Visa Balance": null,
       "Tax Bill Balance": null
     },
@@ -83,8 +83,8 @@
       "Gross Pay": 2300.0,
       "Net Pay": 1955.0,
       "Ordinary Hours Worked": 40,
-      "1.5x Hours Worked": null,
-      "2x Hours Worked": null,
+      "1.5x Hours Worked": NaN,
+      "2x Hours Worked": NaN,
       "Remaining Visa Balance": null,
       "Tax Bill Balance": null
     },
@@ -94,8 +94,8 @@
       "Gross Pay": 2300.0,
       "Net Pay": 1955.0,
       "Ordinary Hours Worked": 40,
-      "1.5x Hours Worked": null,
-      "2x Hours Worked": null,
+      "1.5x Hours Worked": NaN,
+      "2x Hours Worked": NaN,
       "Remaining Visa Balance": null,
       "Tax Bill Balance": null
     },
@@ -105,8 +105,8 @@
       "Gross Pay": 2300.0,
       "Net Pay": 1955.0,
       "Ordinary Hours Worked": 40,
-      "1.5x Hours Worked": null,
-      "2x Hours Worked": null,
+      "1.5x Hours Worked": NaN,
+      "2x Hours Worked": NaN,
       "Remaining Visa Balance": null,
       "Tax Bill Balance": null
     },
@@ -116,8 +116,8 @@
       "Gross Pay": 2300.0,
       "Net Pay": 1955.0,
       "Ordinary Hours Worked": 40,
-      "1.5x Hours Worked": null,
-      "2x Hours Worked": null,
+      "1.5x Hours Worked": NaN,
+      "2x Hours Worked": NaN,
       "Remaining Visa Balance": null,
       "Tax Bill Balance": null
     },
@@ -127,10 +127,21 @@
       "Gross Pay": 2760.0,
       "Net Pay": 1173.0,
       "Ordinary Hours Worked": 40,
-      "1.5x Hours Worked": null,
+      "1.5x Hours Worked": NaN,
       "2x Hours Worked": 8.0,
       "Remaining Visa Balance": 6647.0,
       "Tax Bill Balance": 6613.6
+    },
+    {
+      "File": "Payslip-1375634.pdf",
+      "Week Ending": NaN,
+      "Gross Pay": 3680.0,
+      "Net Pay": 1564.0,
+      "Ordinary Hours Worked": 32,
+      "1.5x Hours Worked": NaN,
+      "2x Hours Worked": 32.0,
+      "Remaining Visa Balance": 5083.0,
+      "Tax Bill Balance": 6523.6
     }
   ],
   "summary": {
