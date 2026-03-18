@@ -27,7 +27,7 @@ def extract_payslip_data(pdf_path):
 
     week_ending = None
     if not dateEnd:
-    dateEnd = re.search(r"(\d{2}/\d{2}/\d{4})", text)
+        dateEnd = re.search(r"(\d{2}/\d{2}/\d{4})", text)
     if dateEnd:
         raw_date = dateEnd.group(1)
         parsed = pd.to_datetime(raw_date, dayfirst=True, errors="coerce")
