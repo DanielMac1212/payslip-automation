@@ -61,7 +61,7 @@ def load_existing_data():
 def calculate_balances(payslips):
 
     df = pd.DataFrame(payslips).replace({pd.NA: None})
-    df["Week Ending"] = pd.to_datetime(df["Week Ending"], dayfirst=True)
+    df["Week Ending"] = pd.to_datetime(df["Week Ending"], dayfirst=True, errors= "coerce")
     df = df.sort_values("Week Ending").reset_index(drop=True)
     df = df.where(pd.notnull(df), None)
 
