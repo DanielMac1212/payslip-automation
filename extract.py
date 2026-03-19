@@ -32,7 +32,7 @@ def extract_payslip_data(pdf_path):
         raw_date = dateEnd.group(1)
         parsed = pd.to_datetime(raw_date, dayfirst=True, errors="coerce")
     if pd.notna(parsed):
-        week_ending = parsed.strftime("%d-%m-%Y")
+        week_ending = parsed.strftime("%d/%m/%Y")
                                                             
     return {
         "File": os.path.basename(pdf_path),
