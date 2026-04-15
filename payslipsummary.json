@@ -175,15 +175,26 @@
       "2x Hours Worked": null,
       "Remaining Visa Balance": 2571.0,
       "Tax Bill Balance": 6253.6
+    },
+    {
+      "File": "Payslip-1473757.pdf",
+      "Week Ending": "12/04/2026",
+      "Gross Pay": 1909.0,
+      "Net Pay": 682.0,
+      "Ordinary Hours Worked": 33,
+      "1.5x Hours Worked": null,
+      "2x Hours Worked": null,
+      "Remaining Visa Balance": 1889.0,
+      "Tax Bill Balance": 6163.6
     }
   ],
   "summary": {
-    "latest_week": "05/04/2026",
-    "latest_net": 557.0,
-    "visa_remaining": 2571.0,
-    "weeks_until_paid": 4.62,
-    "tax_remaining": 6253.6,
-    "weeks_tax_remaining": 69.48,
+    "latest_week": "12/04/2026",
+    "latest_net": 682.0,
+    "visa_remaining": 1889.0,
+    "weeks_until_paid": 2.77,
+    "tax_remaining": 6163.6,
+    "weeks_tax_remaining": 68.48,
     "sio_visa": 3910.0
   }
 }
