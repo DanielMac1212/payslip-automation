@@ -186,15 +186,26 @@
       "2x Hours Worked": null,
       "Remaining Visa Balance": 1889.0,
       "Tax Bill Balance": 6163.6
+    },
+    {
+      "File": "PaySlips-Rail - Out of Cycle Pay-20260412.pdf",
+      "Week Ending": "12/04/2026",
+      "Gross Pay": 467.5,
+      "Net Pay": 154.25,
+      "Ordinary Hours Worked": 18,
+      "1.5x Hours Worked": null,
+      "2x Hours Worked": null,
+      "Remaining Visa Balance": 1734.75,
+      "Tax Bill Balance": 6073.6
     }
   ],
   "summary": {
     "latest_week": "12/04/2026",
-    "latest_net": 682.0,
-    "visa_remaining": 1889.0,
-    "weeks_until_paid": 2.77,
-    "tax_remaining": 6163.6,
-    "weeks_tax_remaining": 68.48,
+    "latest_net": 154.25,
+    "visa_remaining": 1734.75,
+    "weeks_until_paid": 11.25,
+    "tax_remaining": 6073.6,
+    "weeks_tax_remaining": 67.48,
     "sio_visa": 3910.0
   }
 }
