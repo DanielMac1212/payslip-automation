@@ -8,10 +8,7 @@ folder_path = "payslips"
 summary_file = "payslipsummary.json"
 rebuild = os.getenv("REBUILD", "false") == "true"
 
-start_balance = 7820
-tax_bill = 7056.60 - 353
-sio_visa = start_balance / 2
-sio_paid = 0
+total_earnings = 31683.23
 
 def extract_payslip_data(pdf_path):
     
@@ -70,23 +67,13 @@ def calculate_balances(payslips):
     df = df.sort_values("Week Ending").reset_index(drop=True)
     df = df.where(pd.notnull(df), None)
 
-    balance = start_balance
-    tax_balance = tax_bill
-
-    df["Remaining Visa Balance"] = None
-    df["Tax Bill Balance"] = None
-
     target_row = 11
 
     for idx in range(target_row, len(df)):
         net = df.at[idx, "Net Pay"]
 
         if pd.notnull(net):
-            balance -= net
-            tax_balance -= 90
-
-            df.at[idx, "Remaining Visa Balance"] = round(balance, 2)
-            df.at[idx, "Tax Bill Balance"] = round(tax_balance, 2)
+            total_earnings += net
 
     df["Week Ending"] = df["Week Ending"].dt.strftime("%d/%m/%Y")
 
@@ -131,21 +118,6 @@ def main():
             return
     
         df = calculate_balances(all_payslips)
-
-    # SUMMARY CALCULATION
-    latest = df.iloc[-1]
-
-    latest_balance = latest["Remaining Visa Balance"]
-    tax_balance = latest["Tax Bill Balance"]
-
-    weeks_left = None
-    weeks_tax_remaining = None
-
-    if pd.notnull(latest_balance) and latest["Net Pay"]:
-        weeks_left = round(latest_balance / latest["Net Pay"], 2)
-
-    if pd.notnull(tax_balance):
-        weeks_tax_remaining = round(tax_balance / 90, 2)
     
     df = df.replace({float("nan"): None})
     
@@ -154,11 +126,7 @@ def main():
         "summary": {
             "latest_week": safe(latest["Week Ending"]),
             "latest_net": float(latest["Net Pay"]),
-            "visa_remaining": latest_balance,
-            "weeks_until_paid": weeks_left,
-            "tax_remaining": tax_balance,
-            "weeks_tax_remaining": weeks_tax_remaining,
-            "sio_visa": sio_visa - sio_paid
+            "total_earnings": total_earnings,
         }
     }
 
