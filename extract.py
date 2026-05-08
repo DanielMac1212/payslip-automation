@@ -70,8 +70,6 @@ def calculate_balances(payslips):
     target_row = 11
     total_earnings = df["Net Pay"].sum()
 
-    df["Week Ending"] = df["Week Ending"].dt.strftime("%d/%m/%Y")
-
     return df
 
 def safe(value):
@@ -105,29 +103,28 @@ def main():
             except Exception as e:
                 raise RuntimeError(f"❌ Failed processing {file}: {e}")
     
-            all_payslips = existing_payslips + new_entries
+    all_payslips = existing_payslips + new_entries
             
-            if not all_payslips:
+    if not all_payslips:
+        print("No payslips found.")
+        return
             
-                print("No payslips found.")
+    df = calculate_balances(all_payslips)
             
-                return
-            
-            df = calculate_balances(all_payslips)
-            
-            latest = (df.sort_values("Week Ending").iloc[-1])
-    
+    latest = (df.sort_values("Week Ending").iloc[-1])
+    df["Week Ending"] = df["Week Ending"].dt.strftime("%d/%m/%Y")
+    df = df.where(pd.notnull(df), None)
     output = {
         "payslips": df.to_dict(orient="records"),
         "summary": {
-            "latest_week": safe(latest["Week Ending"]),
+            "latest_week": latest["Week Ending"].strftime("%d/%m/%Y"),
             "latest_net": float(latest["Net Pay"]),
             "total_earnings": total_earnings,
         }
     }
 
     with open(summary_file, "w") as f:
-        json.dump(output, f, indent=2)
+        json.dump(output, f, indent=2, allow_nan=False)
 
     # delete processed PDFs
     for file in os.listdir(folder_path):
