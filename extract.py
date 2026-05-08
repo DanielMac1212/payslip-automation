@@ -89,7 +89,6 @@ def main():
     if rebuild:
         if not existing_payslips:
             return
-        df = calculate_balances(existing_payslips)
     else:
         processed_files = {p["File"] for p in existing_payslips}
     
@@ -116,8 +115,7 @@ def main():
         if not all_payslips:
             print("No payslips found.")
             return
-    
-        df = calculate_balances(all_payslips)
+
     
     df = df.replace({float("nan"): None})
     
