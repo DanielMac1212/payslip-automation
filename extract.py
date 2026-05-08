@@ -8,7 +8,7 @@ folder_path = "payslips"
 summary_file = "payslipsummary.json"
 rebuild = os.getenv("REBUILD", "false") == "true"
 
-total_earnings = 31683.23
+previous_earnings = 31683.23
 
 def extract_payslip_data(pdf_path):
     
@@ -68,9 +68,9 @@ def calculate_balances(payslips):
     df = df.where(pd.notnull(df), None)
 
     target_row = 11
-    total_earnings = float(df["Net Pay"].fillna(0).sum())
+    new_earnings = float(df["Net Pay"].fillna(0).sum())
 
-    return df, total_earnings
+    return df, new_earnings
 
 def safe(value):
     return None if pd.isna(value) else value
@@ -103,13 +103,14 @@ def main():
             except Exception as e:
                 raise RuntimeError(f"❌ Failed processing {file}: {e}")
     
-    all_payslips = existing_payslips + new_entries
+        all_payslips = existing_payslips + new_entries
             
     if not all_payslips:
         print("No payslips found.")
         return
             
-    df, total_earnings = calculate_balances(all_payslips)
+    df, new_earnings = calculate_balances(all_payslips)
+    total_earnings = previous_earnings + new_earnings
             
     latest = (df.sort_values("Week Ending").iloc[-1])
     df["Week Ending"] = df["Week Ending"].dt.strftime("%d/%m/%Y")
@@ -119,7 +120,7 @@ def main():
         "summary": {
             "latest_week": latest["Week Ending"].strftime("%d/%m/%Y"),
             "latest_net": float(latest["Net Pay"]),
-            "total_earnings": total_earnings,
+            "total_earnings": float(total_earnings),
         }
     }
 
