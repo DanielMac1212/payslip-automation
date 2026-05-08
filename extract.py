@@ -61,19 +61,14 @@ def load_existing_data():
 
 
 def calculate_balances(payslips):
-
+    global total_earnings
     df = pd.DataFrame(payslips).replace({pd.NA: None})
     df["Week Ending"] = pd.to_datetime(df["Week Ending"], dayfirst=True, errors= "coerce")
     df = df.sort_values("Week Ending").reset_index(drop=True)
     df = df.where(pd.notnull(df), None)
 
     target_row = 11
-
-    for idx in range(target_row, len(df)):
-        net = df.at[idx, "Net Pay"]
-
-        if pd.notnull(net):
-            total_earnings += net
+    total_earnings = df["Net Pay"].sum()
 
     df["Week Ending"] = df["Week Ending"].dt.strftime("%d/%m/%Y")
 
@@ -110,13 +105,17 @@ def main():
             except Exception as e:
                 raise RuntimeError(f"❌ Failed processing {file}: {e}")
     
-        all_payslips = existing_payslips + new_entries
-    
-        if not all_payslips:
-            print("No payslips found.")
-            return
-
-
+            all_payslips = existing_payslips + new_entries
+            
+            if not all_payslips:
+            
+                print("No payslips found.")
+            
+                return
+            
+            df = calculate_balances(all_payslips)
+            
+            latest = (df.sort_values("Week Ending").iloc[-1])
     
     output = {
         "payslips": df.to_dict(orient="records"),
