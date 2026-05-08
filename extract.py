@@ -116,8 +116,7 @@ def main():
             print("No payslips found.")
             return
 
-    
-    df = df.replace({float("nan"): None})
+
     
     output = {
         "payslips": df.to_dict(orient="records"),
