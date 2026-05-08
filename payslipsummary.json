@@ -220,17 +220,6 @@
       "Remaining Visa Balance": -671.73,
       "Tax Bill Balance": 5893.6
     },
-    {
-      "File": "Payslip-1517736.pdf",
-      "Week Ending": "03/05/2026",
-      "Gross Pay": 3715.38,
-      "Net Pay": 2456.38,
-      "Ordinary Hours Worked": 80,
-      "1.5x Hours Worked": NaN,
-      "2x Hours Worked": NaN,
-      "Remaining Visa Balance": NaN,
-      "Tax Bill Balance": NaN
-    }
   ],
   "summary": {
     "latest_week": "29/03/2026",
