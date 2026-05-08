@@ -115,11 +115,11 @@ def main():
     df["Week Ending"] = df["Week Ending"].dt.strftime("%d/%m/%Y")
     df = df.where(pd.notnull(df), None)
     output = {
-        "payslips": df.to_dict(orient="records"),
+        "payslips": json.loads(df.to_json(orient="records")),
         "summary": {
             "latest_week": latest["Week Ending"].strftime("%d/%m/%Y"),
             "latest_net": float(latest["Net Pay"]),
-            "total_earnings": total_earnings,
+            "total_earnings": float(total_earnings),
         }
     }
 
