@@ -68,7 +68,7 @@ def calculate_balances(payslips):
     df = df.where(pd.notnull(df), None)
 
     target_row = 11
-    total_earnings += net
+    total_earnings += df["Net Pay"]
 
     return df
 
